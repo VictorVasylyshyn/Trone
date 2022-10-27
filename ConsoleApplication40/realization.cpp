@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <Windows.h>
 #include <stdio.h>
@@ -7,6 +6,10 @@
 #include <conio.h>
 #include "Header.h"
 using namespace std;
+std::vector<pair<int, int>> a = { {140 / 4, 70 / 2} };
+std::vector<pair<int, int>>::iterator it;
+std::vector<pair<int, int>> b = { {140 / 6, 70 / 4} };
+std::vector<pair<int, int>>::iterator iter;
 void Game::setGame(bool n) {
 	m_startGame = n;
 }
@@ -223,6 +226,7 @@ void SecondPlayer::collision() {
 		}
 	}
 }
+
 void Snake::logic(){
 	switch (dir)
 	{
@@ -244,10 +248,15 @@ void Snake::logic(){
 		break;
 	
 	}
-	collision();
-	if (y<0 || y > width-2 || x < 0 || x > height-2) {
-		setGame(true);
+	if (dir!=STOP)
+	{
+		collision();
+		snakeCollision(a, it, b, iter);
+		if (y<0 || y > width - 2 || x < 0 || x > height - 2) {
+			setGame(true);
+		}
 	}
+	
 	
 }
 
@@ -272,9 +281,321 @@ void SecondPlayer::logic() {
 		break;
 
 	}
-	collision();
-	if (y < 0 || y > width - 2 || x < 0 || x > height - 2) {
-		setGame(true);
+	if (dir != STOP)
+	{
+		collision();
+		snakeCollision(a, it, b, iter);
+		if (y<0 || y > width - 2 || x < 0 || x > height - 2) {
+			setGame(true);
+		}
 	}
 
+}
+void Game::snakeCollision(std::vector<pair<int, int>> f_a, std::vector<pair<int, int>>::iterator it_a, std::vector<pair<int, int>> f_b, std::vector<pair<int, int>>::iterator it_b) {
+
+	for (it_a = f_a.begin(); it_a != f_a.end(); it_a++) {
+		for (it_b = f_b.begin(); it_b != f_b.end(); it_b++) {
+			if (it_a->first == it_b->first && it_a->second == it_b->second)
+			{
+				setGame(true);
+			}
+		}
+
+	}
+}
+void Menu::DrawMenu(HDC hDC, RECT pRECT, int iSEL, int iTITLE)
+{
+	//Толщина заголовка консоли
+	char sMENU[] = "***MENU***";
+	const char* sITEM[] =
+	{
+		"S T A R T",
+		"S E T T I N G S",
+		"E X I T"
+	};
+	char sARROW[] = " -> ";
+	BitBlt(hDC,
+		4, iTITLE,
+		pRECT.right - pRECT.left,
+		pRECT.bottom - pRECT.top,
+		hDC,
+		4, iTITLE,
+		BLACKNESS);
+	SetTextColor(hDC, BLU);
+	TextOutA(hDC, 70, iTITLE, sMENU, strlen(sMENU));
+	for (int iITEM = 0; iITEM < 3; iITEM++)
+	{
+		SetTextColor(hDC, GRN);
+		if (iITEM == iSEL)
+		{
+			SetTextColor(hDC, RED);
+			TextOutA(hDC, 55, iTITLE + (1 + iITEM) * 12, sARROW, strlen(sARROW));
+			TextOutA(hDC, 70, iTITLE + (1 + iITEM) * 12, sITEM[iITEM], strlen(sITEM[iITEM]));
+		}
+		else
+			TextOutA(hDC, 60, iTITLE + (1 + iITEM) * 12, sITEM[iITEM], strlen(sITEM[iITEM]));
+	}
+}
+void Menu::DrawSettings(HDC hDC, RECT pRECT, int iSEL, int iTITLE)
+{
+	//Толщина заголовка консоли
+	char sMENU[] = "***CHOOSE COLOR***";
+	const char* sITEM[] =
+	{
+
+		"YELLOW",
+		"RED",
+		"GREEN",
+		"BLUE",
+		"<-BACK"
+	};
+	char sARROW[] = " -> ";
+	BitBlt(hDC,
+		4, iTITLE,
+		pRECT.right - pRECT.left,
+		pRECT.bottom - pRECT.top,
+		hDC,
+		4, iTITLE,
+		BLACKNESS);
+	SetTextColor(hDC, BLU);
+	TextOutA(hDC, 70, iTITLE, sMENU, strlen(sMENU));
+	for (int iITEM = 0; iITEM < 5; iITEM++)
+	{
+		SetTextColor(hDC, GRN);
+		if (iITEM == iSEL)
+		{
+
+			SetTextColor(hDC, RED);
+			TextOutA(hDC, 55, iTITLE + (1 + iITEM) * 12, sARROW, strlen(sARROW));
+			TextOutA(hDC, 70, iTITLE + (1 + iITEM) * 12, sITEM[iITEM], strlen(sITEM[iITEM]));
+		}
+		else
+			TextOutA(hDC, 70, iTITLE + (1 + iITEM) * 12, sITEM[iITEM], strlen(sITEM[iITEM]));
+	}
+}
+void Menu::PlayerColor(HDC hDC, RECT pRECT, int iSEL, int iTITLE)
+{
+	//Толщина заголовка консоли
+	char sMENU[] = "***CHOOSE COLOR***";
+	const char* sITEM[] =
+	{
+
+		"PLAYER 1",
+		"PLAYER 2",
+		"<-BACK"
+	};
+	char sARROW[] = " -> ";
+	BitBlt(hDC,
+		4, iTITLE,
+		pRECT.right - pRECT.left,
+		pRECT.bottom - pRECT.top,
+		hDC,
+		4, iTITLE,
+		BLACKNESS);
+	SetTextColor(hDC, BLU);
+	TextOutA(hDC, 70, iTITLE, sMENU, strlen(sMENU));
+	for (int iITEM = 0; iITEM < 2; iITEM++)
+	{
+		SetTextColor(hDC, GRN);
+		if (iITEM == iSEL)
+		{
+
+			SetTextColor(hDC, RED);
+			TextOutA(hDC, 55, iTITLE + (1 + iITEM) * 12, sARROW, strlen(sARROW));
+			TextOutA(hDC, 70, iTITLE + (1 + iITEM) * 12, sITEM[iITEM], strlen(sITEM[iITEM]));
+		}
+		else
+			TextOutA(hDC, 70, iTITLE + (1 + iITEM) * 12, sITEM[iITEM], strlen(sITEM[iITEM]));
+	}
+}
+
+void Menu::menu() {
+	int  iSEL = 0;
+	int  nYRes = GetSystemMetrics(SM_CYMENUSIZE) * 2;
+	HDC  hDC;
+	HDC shDC;
+	RECT pRECT;
+	RECT spRECT;
+	HWND hWnd = GetForegroundWindow();
+	HWND ShWnd = GetForegroundWindow();
+	if (hWnd)
+	{
+
+		if (hDC = GetWindowDC(hWnd))
+		{
+			SetBkMode(hDC, TRANSPARENT);
+			GetClientRect(hWnd, &pRECT);
+		link1:
+			while (!g)
+			{
+				DrawMenu(hDC, pRECT, iSEL, nYRes);
+				RedrawWindow(hWnd, NULL, NULL,
+					RDW_ERASE | RDW_VALIDATE | RDW_UPDATENOW);
+
+				switch (toupper(_getch()))
+				{
+				case 'W':
+					PlaySound(L"menu.wav", NULL, SND_ASYNC);
+					if ((iSEL = iSEL - 1) < 0)
+						iSEL = 2;
+					break;
+				case 'S':
+					PlaySound(L"menu.wav", NULL, SND_ASYNC);
+					if (2 < (iSEL = iSEL + 1))
+						iSEL = 0;
+					break;
+				case 13:
+					if (iSEL == 0) {
+						g = 1;
+					}
+					if (iSEL == 2) {
+						exit(0);
+					}
+					if (iSEL == 1) {
+						if (ShWnd)
+						{
+							iSEL = 0;
+							if (shDC = GetWindowDC(hWnd))
+							{
+								SetBkMode(shDC, TRANSPARENT);
+								GetClientRect(ShWnd, &spRECT);
+								while (true)
+								{
+									
+									PlayerColor(shDC, spRECT, iSEL, nYRes);
+									RedrawWindow(hWnd, NULL, NULL,
+										RDW_ERASE | RDW_VALIDATE | RDW_UPDATENOW);
+									switch (toupper(_getch()))
+									{
+									case 'W':
+										if ((iSEL = iSEL - 1) < 0)
+											iSEL = 1;
+										break;
+									case 'S':
+										if (4 < (iSEL = iSEL + 1))
+											iSEL = 0;
+										break;
+									case 13:
+										if (iSEL == 1) {
+											if (ShWnd)
+											{
+												iSEL = 0;
+												if (shDC = GetWindowDC(hWnd))
+												{
+													SetBkMode(shDC, TRANSPARENT);
+													GetClientRect(ShWnd, &spRECT);
+													while (true)
+													{
+														DrawSettings(shDC, spRECT, iSEL, nYRes);
+														RedrawWindow(hWnd, NULL, NULL,
+															RDW_ERASE | RDW_VALIDATE | RDW_UPDATENOW);
+														switch (toupper(_getch()))
+														{
+														case 'W':
+															if ((iSEL = iSEL - 1) < 0)
+																iSEL = 1;
+															break;
+														case 'S':
+															if (4 < (iSEL = iSEL + 1))
+																iSEL = 0;
+															break;
+														case 13:
+															if (iSEL == 4) {
+																goto link1;
+															}
+															if (iSEL == 0) {
+																color = 14;
+
+																goto link1;
+															}
+															if (iSEL == 1) {
+																color = 4;
+
+																goto link1;
+															}
+															if (iSEL == 2) {
+																color = 2;
+
+																goto link1;
+															}
+															if (iSEL == 3) {
+																color = 1;
+
+																goto link1;
+															}
+															break;
+
+														};
+													}
+												}
+											}
+										}
+										if (iSEL == 0) {
+											if (ShWnd)
+											{
+												iSEL = 0;
+												if (shDC = GetWindowDC(hWnd))
+												{
+													SetBkMode(shDC, TRANSPARENT);
+													GetClientRect(ShWnd, &spRECT);
+													while (true)
+													{
+														DrawSettings(shDC, spRECT, iSEL, nYRes);
+														RedrawWindow(hWnd, NULL, NULL,
+															RDW_ERASE | RDW_VALIDATE | RDW_UPDATENOW);
+														switch (toupper(_getch()))
+														{
+														case 'W':
+															if ((iSEL = iSEL - 1) < 0)
+																iSEL = 1;
+															break;
+														case 'S':
+															if (4 < (iSEL = iSEL + 1))
+																iSEL = 0;
+															break;
+														case 13:
+															if (iSEL == 4) {
+																goto link1;
+															}
+															if (iSEL == 0) {
+																color = 14;
+
+																goto link1;
+															}
+															if (iSEL == 1) {
+																color = 4;
+
+																goto link1;
+															}
+															if (iSEL == 2) {
+																color = 2;
+
+																goto link1;
+															}
+															if (iSEL == 3) {
+																color = 1;
+
+																goto link1;
+															}
+															break;
+
+														};
+													}
+												}
+											}
+										}
+										
+										break;
+
+									};
+								}
+							}
+						}
+					}
+					break;
+
+				};
+			}
+		}
+	}
 }

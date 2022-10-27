@@ -21,10 +21,18 @@
     <ClCompile Include="realization.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="menu.wav">
+      <Filter>Исходные файлы</Filter>
+    </Media>
   </ItemGroup>
 </Project>

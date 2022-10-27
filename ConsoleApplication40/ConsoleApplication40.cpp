@@ -8,11 +8,15 @@
 #include <stdio.h>
 #include <conio.h>
 #include "Header.h"
+#pragma comment(lib, "Winmm.lib")
 using namespace std;
+
+int color;
 
 int main()
 {
-	
+	Menu menu;
+	menu.menu();
 	Snake snake;
 	SecondPlayer plr;
 	snake.setup();
