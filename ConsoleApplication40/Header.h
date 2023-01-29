@@ -8,11 +8,13 @@
 #define BLK RGB(0,0,0)
 #define WHT RGB(255,255,255)
 using namespace std;
+
 class Game {
 protected:
+	
 	bool m_startGame;
-	const int width = 140;
-	const int height = 70;
+	const int width = 135;
+	const int height = 55;
 	enum locationInput {
 		STOP = 0,
 		LEFT,
@@ -46,7 +48,7 @@ public:
 	static void SetPos(int x, int y);
 	void drawSnake(int i, int j, int x, int y, HANDLE hStdout);
 	void collision();
-	//virtual void snakeCollision();
+	//void snakeCollision(std::vector<pair<int, int>>, std::vector<pair<int, int>>::iterator, std::vector<pair<int, int>>, std::vector<pair<int, int>>::iterator);
 	virtual void setGame(bool n);
 	bool getStartGame() const { return m_startGame; }
 	int getX() const{ return x; }
@@ -66,7 +68,7 @@ public:
 	void drawSnake(int i, int j, int x, int y, HANDLE hStdout);
 	bool getStartGame() const { return m_startGame; }
 	void collision();
-	//virtual void snakeCollision(std::vector<pair<int, int>>, std::vector<pair<int, int>>::iterator, std::vector<pair<int, int>>, std::vector<pair<int, int>>::iterator);
+	//void snakeCollision(std::vector<pair<int, int>>, std::vector<pair<int, int>>::iterator, std::vector<pair<int, int>>, std::vector<pair<int, int>>::iterator);
 	int getX() const { return x; }
 	int getY() const { return y; }
 };

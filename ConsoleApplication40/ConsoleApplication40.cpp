@@ -21,6 +21,7 @@ int main()
 	SecondPlayer plr;
 	snake.setup();
 	plr.setup();
+
 	while (!(plr.getStartGame() || snake.getStartGame()))
 	{
 		system("mode con cols=226 lines=77");

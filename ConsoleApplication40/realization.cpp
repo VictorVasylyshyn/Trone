@@ -6,10 +6,13 @@
 #include <conio.h>
 #include "Header.h"
 using namespace std;
-std::vector<pair<int, int>> a = { {140 / 4, 70 / 2} };
-std::vector<pair<int, int>>::iterator it;
-std::vector<pair<int, int>> b = { {140 / 6, 70 / 4} };
-std::vector<pair<int, int>>::iterator iter;
+namespace coord {
+	std::vector<pair<int, int>> a = { {140 / 4, 70 / 2} };
+	std::vector<pair<int, int>>::iterator it;
+	std::vector<pair<int, int>> b = { {140 / 6, 70 / 4} };
+	std::vector<pair<int, int>>::iterator iter;
+}
+
 void Game::setGame(bool n) {
 	m_startGame = n;
 }
@@ -77,11 +80,12 @@ void Snake::map(int i, int j, HANDLE hStdout) {
 	}
 
 }
-char w[3] = { 201,210 , 187 };
-char s[3] = { 198,206 ,181 };
-char n[3] = { 200,208 ,188 };
+
 void Snake::drawSnake(int i, int j, int x, int y, HANDLE hStdout) {
 
+	char w[3] = { 201,210 , 187 };
+	char s[3] = { 198,206 ,181 };
+	char n[3] = { 200,208 ,188 };
 	if (j == x - 1 && i == y) {
 		SetPos(i, j);
 
@@ -108,6 +112,9 @@ void Snake::drawSnake(int i, int j, int x, int y, HANDLE hStdout) {
 }
 void SecondPlayer::drawSnake(int i, int j, int x, int y, HANDLE hStdout) {
 
+	char w[3] = { 201,210 , 187 };
+	char s[3] = { 198,206 ,181 };
+	char n[3] = { 200,208 ,188 };
 	if (j == x - 1 && i == y) {
 		SetPos(i, j);
 
@@ -209,20 +216,22 @@ Game::locationInput SecondPlayer::input() {
 	}
 }
 void Snake::collision() {
-	for (it = a.begin(); it != a.end()-1; it++)
+	for (coord::it = coord::a.begin(); coord::it != coord::a.end()-1; ++coord::it)
 	{
-		if (x == (it->first) && y == (it->second))
+		if (x == (coord::it->first) && y == (coord::it->second))
 		{
 			setGame(true);
+			cout << "PLAYER TWO WIN!";
 		}
 	}
 }
 void SecondPlayer::collision() {
-	for (iter = b.begin(); iter != b.end() - 1; iter++)
+	for (coord::iter = coord::b.begin(); coord::iter != coord::b.end() - 1; ++coord::iter)
 	{
-		if (x == (iter->first) && y == (iter->second))
+		if (x == (coord::iter->first) && y == (coord::iter->second))
 		{
 			setGame(true);
+			cout << "PLAYER ONE WIN!";
 		}
 	}
 }
@@ -231,30 +240,32 @@ void Snake::logic(){
 	switch (dir)
 	{
 	case Game::LEFT:
-		y-=2;
-		a.push_back(pair<int,int>(x,y));
+		y--;
+		coord::a.push_back(pair<int,int>(x,y));
 		break;
 	case Game::RIGHT:
-		y+=2;
-		a.push_back(pair<int, int>(x, y));
+		y++;
+		coord::a.push_back(pair<int, int>(x, y));
 		break;
 	case Game::UP:
-		x-=2;
-		a.push_back(pair<int, int>(x, y));
+		x--;
+		coord::a.push_back(pair<int, int>(x, y));
 		break;
 	case Game::DOWN:
-		x+=2;
-		a.push_back(pair<int, int>(x, y));
+		x++;
+		coord::a.push_back(pair<int, int>(x, y));
 		break;
 	
 	}
 	if (dir!=STOP)
 	{
 		collision();
-		snakeCollision(a, it, b, iter);
+		snakeCollision(coord::a, coord::it, coord::b, coord::iter);
 		if (y<0 || y > width - 2 || x < 0 || x > height - 2) {
 			setGame(true);
+			cout << "PLAYER TWO WIN!";
 		}
+		
 	}
 	
 	
@@ -264,29 +275,30 @@ void SecondPlayer::logic() {
 	switch (dir)
 	{
 	case Game::LEFT:
-		y -= 2;
-		b.push_back(pair<int, int>(x, y));
+		y--;
+		coord::b.push_back(pair<int, int>(x, y));
 		break;
 	case Game::RIGHT:
-		y += 2;
-		b.push_back(pair<int, int>(x, y));
+		y++;
+		coord::b.push_back(pair<int, int>(x, y));
 		break;
 	case Game::UP:
-		x -= 2;
-		b.push_back(pair<int, int>(x, y));
+		x--;
+		coord::b.push_back(pair<int, int>(x, y));
 		break;
 	case Game::DOWN:
-		x += 2;
-		b.push_back(pair<int, int>(x, y));
+		x++;
+		coord::b.push_back(pair<int, int>(x, y));
 		break;
 
 	}
 	if (dir != STOP)
 	{
 		collision();
-		snakeCollision(a, it, b, iter);
+		snakeCollision(coord::a, coord::it, coord::b, coord::iter);
 		if (y<0 || y > width - 2 || x < 0 || x > height - 2) {
 			setGame(true);
+			cout << "PLAYER ONE WIN!";
 		}
 	}
 
@@ -303,6 +315,7 @@ void Game::snakeCollision(std::vector<pair<int, int>> f_a, std::vector<pair<int,
 
 	}
 }
+
 void Menu::DrawMenu(HDC hDC, RECT pRECT, int iSEL, int iTITLE)
 {
 	//Толщина заголовка консоли
